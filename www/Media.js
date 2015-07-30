@@ -37,7 +37,7 @@ var mediaObjects = {};
  * @param statusCallback        The callback to be called when media status has changed.
  *                                  statusCallback(int statusCode) - OPTIONAL
  */
-var Media = function(src, successCallback, errorCallback, statusCallback) {
+var YPMedia = function(src, successCallback, errorCallback, statusCallback) {
     argscheck.checkArgs('sFFF', 'Media', arguments);
     this.id = utils.createUUID();
     mediaObjects[this.id] = this;
@@ -51,35 +51,35 @@ var Media = function(src, successCallback, errorCallback, statusCallback) {
 };
 
 // Media messages
-Media.MEDIA_STATE = 1;
-Media.MEDIA_DURATION = 2;
-Media.MEDIA_POSITION = 3;
-Media.MEDIA_ERROR = 9;
+YPMedia.MEDIA_STATE = 1;
+YPMedia.MEDIA_DURATION = 2;
+YPMedia.MEDIA_POSITION = 3;
+YPMedia.MEDIA_ERROR = 9;
 
 // Media states
-Media.MEDIA_NONE = 0;
-Media.MEDIA_STARTING = 1;
-Media.MEDIA_RUNNING = 2;
-Media.MEDIA_PAUSED = 3;
-Media.MEDIA_STOPPED = 4;
-Media.MEDIA_MSG = ["None", "Starting", "Running", "Paused", "Stopped"];
+YPMedia.MEDIA_NONE = 0;
+YPMedia.MEDIA_STARTING = 1;
+YPMedia.MEDIA_RUNNING = 2;
+YPMedia.MEDIA_PAUSED = 3;
+YPMedia.MEDIA_STOPPED = 4;
+YPMedia.MEDIA_MSG = ["None", "Starting", "Running", "Paused", "Stopped"];
 
 // "static" function to return existing objs.
-Media.get = function(id) {
+YPMedia.get = function(id) {
     return mediaObjects[id];
 };
 
 /**
  * Start or resume playing audio file.
  */
-Media.prototype.play = function(options) {
+YPMedia.prototype.play = function(options) {
     exec(null, null, "Media", "startPlayingAudio", [this.id, this.src, options]);
 };
 
 /**
  * Stop playing audio file.
  */
-Media.prototype.stop = function() {
+YPMedia.prototype.stop = function() {
     var me = this;
     exec(function() {
         me._position = 0;
@@ -89,7 +89,7 @@ Media.prototype.stop = function() {
 /**
  * Seek or jump to a new time in the track..
  */
-Media.prototype.seekTo = function(milliseconds) {
+YPMedia.prototype.seekTo = function(milliseconds) {
     var me = this;
     exec(function(p) {
         me._position = p;
@@ -99,7 +99,7 @@ Media.prototype.seekTo = function(milliseconds) {
 /**
  * Pause playing audio file.
  */
-Media.prototype.pause = function() {
+YPMedia.prototype.pause = function() {
     exec(null, this.errorCallback, "Media", "pausePlayingAudio", [this.id]);
 };
 
@@ -109,14 +109,14 @@ Media.prototype.pause = function() {
  *
  * @return      duration or -1 if not known.
  */
-Media.prototype.getDuration = function() {
+YPMedia.prototype.getDuration = function() {
     return this._duration;
 };
 
 /**
  * Get position of audio.
  */
-Media.prototype.getCurrentPosition = function(success, fail) {
+YPMedia.prototype.getCurrentPosition = function(success, fail) {
     var me = this;
     exec(function(p) {
         me._position = p;
@@ -127,35 +127,35 @@ Media.prototype.getCurrentPosition = function(success, fail) {
 /**
  * Start recording audio file.
  */
-Media.prototype.startRecord = function() {
+YPMedia.prototype.startRecord = function() {
     exec(null, this.errorCallback, "Media", "startRecordingAudio", [this.id, this.src]);
 };
 
 /**
  * Stop recording audio file.
  */
-Media.prototype.stopRecord = function() {
+YPMedia.prototype.stopRecord = function() {
     exec(null, this.errorCallback, "Media", "stopRecordingAudio", [this.id]);
 };
 
 /**
  * Release the resources.
  */
-Media.prototype.release = function() {
+YPMedia.prototype.release = function() {
     exec(null, this.errorCallback, "Media", "release", [this.id]);
 };
 
 /**
  * Adjust the volume.
  */
-Media.prototype.setVolume = function(volume) {
+YPMedia.prototype.setVolume = function(volume) {
     exec(null, null, "Media", "setVolume", [this.id, volume]);
 };
 
 /**
  * Adjust the playback rate.
  */
-Media.prototype.setRate = function(rate) {
+YPMedia.prototype.setRate = function(rate) {
     if (cordova.platformId === 'ios'){
         exec(null, null, "Media", "setRate", [this.id, rate]);
     } else {
@@ -172,25 +172,25 @@ Media.prototype.setRate = function(rate) {
  * @param msgType       The 'type' of update this is
  * @param value         Use of value is determined by the msgType
  */
-Media.onStatus = function(id, msgType, value) {
+YPMedia.onStatus = function(id, msgType, value) {
 
     var media = mediaObjects[id];
 
     if(media) {
         switch(msgType) {
-            case Media.MEDIA_STATE :
+            case YPMedia.MEDIA_STATE :
                 media.statusCallback && media.statusCallback(value);
-                if(value == Media.MEDIA_STOPPED) {
+                if(value == YPMedia.MEDIA_STOPPED) {
                     media.successCallback && media.successCallback();
                 }
                 break;
-            case Media.MEDIA_DURATION :
+            case YPMedia.MEDIA_DURATION :
                 media._duration = value;
                 break;
-            case Media.MEDIA_ERROR :
+            case YPMedia.MEDIA_ERROR :
                 media.errorCallback && media.errorCallback(value);
                 break;
-            case Media.MEDIA_POSITION :
+            case YPMedia.MEDIA_POSITION :
                 media._position = Number(value);
                 break;
             default :
@@ -204,11 +204,11 @@ Media.onStatus = function(id, msgType, value) {
 
 };
 
-module.exports = Media;
+module.exports = YPMedia;
 
 function onMessageFromNative(msg) {
     if (msg.action == 'status') {
-        Media.onStatus(msg.status.id, msg.status.msgType, msg.status.value);
+    	YPMedia.onStatus(msg.status.id, msg.status.msgType, msg.status.value);
     } else {
         throw new Error('Unknown media action' + msg.action);
     }

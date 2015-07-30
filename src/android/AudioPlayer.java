@@ -16,7 +16,7 @@
        specific language governing permissions and limitations
        under the License.
 */
-package org.apache.cordova.media;
+package yunpeng.cordova.media;
 
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -141,8 +141,8 @@ public class AudioPlayer implements OnCompletionListener, OnPreparedListener, On
         case NONE:
             this.audioFile = file;
             this.recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            this.recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT); // THREE_GPP);
-            this.recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT); //AMR_NB);
+            this.recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4); // THREE_GPP);
+            this.recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC); //AMR_NB);
             this.recorder.setOutputFile(this.tempFile);
             try {
                 this.recorder.prepare();

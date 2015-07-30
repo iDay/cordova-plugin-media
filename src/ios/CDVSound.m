@@ -553,8 +553,23 @@
                 }
             }
             
+            // Set default formatID, quality, sampleRate and audioChannels
+                NSNumber* formatID = [NSNumber numberWithInt: kAudioFormatMPEG4AAC];
+                NSNumber* quality = [NSNumber numberWithInt:AVAudioQualityMedium];
+                NSNumber* sampleRate = [NSNumber numberWithFloat: 44100.0];
+                NSNumber* numberOfChannels = [NSNumber numberWithInt: 1];
+                
+                
+                NSDictionary* recorderSettingsDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                    formatID,AVFormatIDKey,
+                    quality,AVEncoderAudioQualityKey,
+                    sampleRate,AVSampleRateKey,
+                    numberOfChannels,AVNumberOfChannelsKey,
+                    nil
+                ];
+            
             // create a new recorder for each start record
-            audioFile.recorder = [[CDVAudioRecorder alloc] initWithURL:audioFile.resourceURL settings:nil error:&error];
+            audioFile.recorder = [[CDVAudioRecorder alloc] initWithURL:audioFile.resourceURL settings:recorderSettingsDict error:&error];
             
             bool recordingSuccess = NO;
             if (error == nil) {
