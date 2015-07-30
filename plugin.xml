@@ -27,8 +27,8 @@ id="cordova-plugin-media-m4a"
     <description>Cordova Media M4A Plugin</description>
     <license>Apache 2.0</license>
     <keywords>cordova,media</keywords>
-    <repo>https://git-wip-us.apache.org/repos/asf/cordova-plugin-media.git</repo>
-    <issue>https://issues.apache.org/jira/browse/CB/component/12320647</issue>
+    <repo>https://github.com/iDay/cordova-plugin-media.git</repo>
+    <issue>https://github.com/iDay/cordova-plugin-media/issues</issue>
     
     <dependency id="cordova-plugin-file" version=">=2.0.0" />
 
@@ -67,8 +67,8 @@ id="cordova-plugin-media-m4a"
                  <param name="ios-package" value="YPCDVSound" /> 
              </feature>
          </config-file>
-         <header-file src="src/ios/CDVSound.h" />
-         <source-file src="src/ios/CDVSound.m" />
+         <header-file src="src/ios/YPCDVSound.h" />
+         <source-file src="src/ios/YPCDVSound.m" />
      </platform>
 
 </plugin>
