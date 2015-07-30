@@ -17,8 +17,8 @@
  under the License.
  */
 
-#import "CDVSound.h"
-#import "CDVFile.h"
+#import "YPCDVSound.h"
+#import "YPCDVFile.h"
 
 #define DOCUMENTS_SCHEME_PREFIX @"documents://"
 #define HTTP_SCHEME_PREFIX @"http://"
@@ -26,7 +26,7 @@
 #define CDVFILE_PREFIX @"cdvfile://"
 #define RECORDING_WAV @"wav"
 
-@implementation CDVSound
+@implementation YPCDVSound
 
 @synthesize soundCache, avSession;
 
@@ -131,13 +131,13 @@
 }
 
 // Creates or gets the cached audio file resource object
-- (CDVAudioFile*)audioFileForResource:(NSString*)resourcePath withId:(NSString*)mediaId doValidation:(BOOL)bValidate forRecording:(BOOL)bRecord
+- (YPCDVAudioFile*)audioFileForResource:(NSString*)resourcePath withId:(NSString*)mediaId doValidation:(BOOL)bValidate forRecording:(BOOL)bRecord
 {
     BOOL bError = NO;
     CDVMediaError errcode = MEDIA_ERR_NONE_SUPPORTED;
     NSString* errMsg = @"";
     NSString* jsString = nil;
-    CDVAudioFile* audioFile = nil;
+    YPCDVAudioFile* audioFile = nil;
     NSURL* resourceURL = nil;
 
     if ([self soundCache] == nil) {
@@ -152,7 +152,7 @@
             errcode = MEDIA_ERR_ABORTED;
             errMsg = @"invalid media src argument";
         } else {
-            audioFile = [[CDVAudioFile alloc] init];
+            audioFile = [[YPCDVAudioFile alloc] init];
             audioFile.resourcePath = resourcePath;
             audioFile.resourceURL = nil;  // validate resourceURL when actually play or record
             [[self soundCache] setObject:audioFile forKey:mediaId];
@@ -217,7 +217,7 @@
     NSString* mediaId = [command argumentAtIndex:0];
     NSString* resourcePath = [command argumentAtIndex:1];
 
-    CDVAudioFile* audioFile = [self audioFileForResource:resourcePath withId:mediaId doValidation:NO forRecording:NO];
+    YPCDVAudioFile* audioFile = [self audioFileForResource:resourcePath withId:mediaId doValidation:NO forRecording:NO];
 
     if (audioFile == nil) {
         NSString* errorMessage = [NSString stringWithFormat:@"Failed to initialize Media file with path %@", resourcePath];
@@ -238,7 +238,7 @@
     NSNumber* volume = [command argumentAtIndex:1 withDefault:[NSNumber numberWithFloat:1.0]];
 
     if ([self soundCache] != nil) {
-        CDVAudioFile* audioFile = [[self soundCache] objectForKey:mediaId];
+        YPCDVAudioFile* audioFile = [[self soundCache] objectForKey:mediaId];
         if (audioFile != nil) {
             audioFile.volume = volume;
             if (audioFile.player) {
@@ -260,7 +260,7 @@
     NSNumber* rate = [command argumentAtIndex:1 withDefault:[NSNumber numberWithFloat:1.0]];
 
     if ([self soundCache] != nil) {
-        CDVAudioFile* audioFile = [[self soundCache] objectForKey:mediaId];
+        YPCDVAudioFile* audioFile = [[self soundCache] objectForKey:mediaId];
         if (audioFile != nil) {
             audioFile.rate = rate;
             if (audioFile.player) {
@@ -286,7 +286,7 @@
     BOOL bError = NO;
     NSString* jsString = nil;
 
-    CDVAudioFile* audioFile = [self audioFileForResource:resourcePath withId:mediaId doValidation:YES forRecording:NO];
+    YPCDVAudioFile* audioFile = [self audioFileForResource:resourcePath withId:mediaId doValidation:YES forRecording:NO];
     if ((audioFile != nil) && (audioFile.resourceURL != nil)) {
         if (audioFile.player == nil) {
             bError = [self prepareToPlay:audioFile withId:mediaId];
@@ -360,7 +360,7 @@
     return;
 }
 
-- (BOOL)prepareToPlay:(CDVAudioFile*)audioFile withId:(NSString*)mediaId
+- (BOOL)prepareToPlay:(YPCDVAudioFile*)audioFile withId:(NSString*)mediaId
 {
     BOOL bError = NO;
     NSError* __autoreleasing playerError = nil;
@@ -369,7 +369,7 @@
     NSURL* resourceURL = audioFile.resourceURL;
 
     if ([resourceURL isFileURL]) {
-        audioFile.player = [[CDVAudioPlayer alloc] initWithContentsOfURL:resourceURL error:&playerError];
+        audioFile.player = [[YPCDVAudioPlayer alloc] initWithContentsOfURL:resourceURL error:&playerError];
     } else {
         NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:resourceURL];
         NSString* userAgent = [self.commandDelegate userAgent];
@@ -391,7 +391,7 @@
 
             [data writeToFile:filePath atomically:YES];
             NSURL* fileURL = [NSURL fileURLWithPath:filePath];
-            audioFile.player = [[CDVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&playerError];
+            audioFile.player = [[YPCDVAudioPlayer alloc] initWithContentsOfURL:fileURL error:&playerError];
         }
     }
 
@@ -413,7 +413,7 @@
 - (void)stopPlayingAudio:(CDVInvokedUrlCommand*)command
 {
     NSString* mediaId = [command argumentAtIndex:0];
-    CDVAudioFile* audioFile = [[self soundCache] objectForKey:mediaId];
+    YPCDVAudioFile* audioFile = [[self soundCache] objectForKey:mediaId];
     NSString* jsString = nil;
 
     if ((audioFile != nil) && (audioFile.player != nil)) {
@@ -431,7 +431,7 @@
 {
     NSString* mediaId = [command argumentAtIndex:0];
     NSString* jsString = nil;
-    CDVAudioFile* audioFile = [[self soundCache] objectForKey:mediaId];
+    YPCDVAudioFile* audioFile = [[self soundCache] objectForKey:mediaId];
 
     if ((audioFile != nil) && (audioFile.player != nil)) {
         NSLog(@"Paused playing audio sample '%@'", audioFile.resourcePath);
@@ -454,7 +454,7 @@
 
     NSString* mediaId = [command argumentAtIndex:0];
 
-    CDVAudioFile* audioFile = [[self soundCache] objectForKey:mediaId];
+    YPCDVAudioFile* audioFile = [[self soundCache] objectForKey:mediaId];
     double position = [[command argumentAtIndex:1] doubleValue];
 
     if ((audioFile != nil) && (audioFile.player != nil)) {
@@ -481,7 +481,7 @@
     NSString* mediaId = [command argumentAtIndex:0];
 
     if (mediaId != nil) {
-        CDVAudioFile* audioFile = [[self soundCache] objectForKey:mediaId];
+        YPCDVAudioFile* audioFile = [[self soundCache] objectForKey:mediaId];
         if (audioFile != nil) {
             if (audioFile.player && [audioFile.player isPlaying]) {
                 [audioFile.player stop];
@@ -505,7 +505,7 @@
     NSString* mediaId = [command argumentAtIndex:0];
 
 #pragma unused(mediaId)
-    CDVAudioFile* audioFile = [[self soundCache] objectForKey:mediaId];
+    YPCDVAudioFile* audioFile = [[self soundCache] objectForKey:mediaId];
     double position = -1;
 
     if ((audioFile != nil) && (audioFile.player != nil) && [audioFile.player isPlaying]) {
@@ -525,7 +525,7 @@
 #pragma unused(callbackId)
 
     NSString* mediaId = [command argumentAtIndex:0];
-    CDVAudioFile* audioFile = [self audioFileForResource:[command argumentAtIndex:1] withId:mediaId doValidation:YES forRecording:YES];
+    YPCDVAudioFile* audioFile = [self audioFileForResource:[command argumentAtIndex:1] withId:mediaId doValidation:YES forRecording:YES];
     __block NSString* jsString = nil;
     __block NSString* errorMsg = @"";
 
@@ -569,7 +569,7 @@
                 ];
             
             // create a new recorder for each start record
-            audioFile.recorder = [[CDVAudioRecorder alloc] initWithURL:audioFile.resourceURL settings:recorderSettingsDict error:&error];
+            audioFile.recorder = [[YPCDVAudioRecorder alloc] initWithURL:audioFile.resourceURL settings:recorderSettingsDict error:&error];
             
             bool recordingSuccess = NO;
             if (error == nil) {
@@ -634,7 +634,7 @@
 {
     NSString* mediaId = [command argumentAtIndex:0];
 
-    CDVAudioFile* audioFile = [[self soundCache] objectForKey:mediaId];
+    YPCDVAudioFile* audioFile = [[self soundCache] objectForKey:mediaId];
     NSString* jsString = nil;
 
     if ((audioFile != nil) && (audioFile.recorder != nil)) {
@@ -650,9 +650,9 @@
 
 - (void)audioRecorderDidFinishRecording:(AVAudioRecorder*)recorder successfully:(BOOL)flag
 {
-    CDVAudioRecorder* aRecorder = (CDVAudioRecorder*)recorder;
+    YPCDVAudioRecorder* aRecorder = (YPCDVAudioRecorder*)recorder;
     NSString* mediaId = aRecorder.mediaId;
-    CDVAudioFile* audioFile = [[self soundCache] objectForKey:mediaId];
+    YPCDVAudioFile* audioFile = [[self soundCache] objectForKey:mediaId];
     NSString* jsString = nil;
 
     if (audioFile != nil) {
@@ -672,9 +672,9 @@
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer*)player successfully:(BOOL)flag
 {
-    CDVAudioPlayer* aPlayer = (CDVAudioPlayer*)player;
+    YPCDVAudioPlayer* aPlayer = (YPCDVAudioPlayer*)player;
     NSString* mediaId = aPlayer.mediaId;
-    CDVAudioFile* audioFile = [[self soundCache] objectForKey:mediaId];
+    YPCDVAudioFile* audioFile = [[self soundCache] objectForKey:mediaId];
     NSString* jsString = nil;
 
     if (audioFile != nil) {
@@ -709,7 +709,7 @@
 
 - (void)onReset
 {
-    for (CDVAudioFile* audioFile in [[self soundCache] allValues]) {
+    for (YPCDVAudioFile* audioFile in [[self soundCache] allValues]) {
         if (audioFile != nil) {
             if (audioFile.player != nil) {
                 [audioFile.player stop];
@@ -726,7 +726,7 @@
 
 @end
 
-@implementation CDVAudioFile
+@implementation YPCDVAudioFile
 
 @synthesize resourcePath;
 @synthesize resourceURL;
@@ -734,12 +734,12 @@
 @synthesize recorder;
 
 @end
-@implementation CDVAudioPlayer
+@implementation YPCDVAudioPlayer
 @synthesize mediaId;
 
 @end
 
-@implementation CDVAudioRecorder
+@implementation YPCDVAudioRecorder
 @synthesize mediaId;
 
 @end
