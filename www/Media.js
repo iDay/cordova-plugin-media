@@ -38,7 +38,7 @@ var mediaObjects = {};
  *                                  statusCallback(int statusCode) - OPTIONAL
  */
 var YPMedia = function(src, successCallback, errorCallback, statusCallback) {
-    argscheck.checkArgs('sFFF', 'Media', arguments);
+    argscheck.checkArgs('sFFF', 'YPMedia', arguments);
     this.id = utils.createUUID();
     mediaObjects[this.id] = this;
     this.src = src;
@@ -47,7 +47,7 @@ var YPMedia = function(src, successCallback, errorCallback, statusCallback) {
     this.statusCallback = statusCallback;
     this._duration = -1;
     this._position = -1;
-    exec(null, this.errorCallback, "Media", "create", [this.id, this.src]);
+    exec(null, this.errorCallback, "YPMedia", "create", [this.id, this.src]);
 };
 
 // Media messages
@@ -73,7 +73,7 @@ YPMedia.get = function(id) {
  * Start or resume playing audio file.
  */
 YPMedia.prototype.play = function(options) {
-    exec(null, null, "Media", "startPlayingAudio", [this.id, this.src, options]);
+    exec(null, null, "YPMedia", "startPlayingAudio", [this.id, this.src, options]);
 };
 
 /**
@@ -83,7 +83,7 @@ YPMedia.prototype.stop = function() {
     var me = this;
     exec(function() {
         me._position = 0;
-    }, this.errorCallback, "Media", "stopPlayingAudio", [this.id]);
+    }, this.errorCallback, "YPMedia", "stopPlayingAudio", [this.id]);
 };
 
 /**
@@ -93,14 +93,14 @@ YPMedia.prototype.seekTo = function(milliseconds) {
     var me = this;
     exec(function(p) {
         me._position = p;
-    }, this.errorCallback, "Media", "seekToAudio", [this.id, milliseconds]);
+    }, this.errorCallback, "YPMedia", "seekToAudio", [this.id, milliseconds]);
 };
 
 /**
  * Pause playing audio file.
  */
 YPMedia.prototype.pause = function() {
-    exec(null, this.errorCallback, "Media", "pausePlayingAudio", [this.id]);
+    exec(null, this.errorCallback, "YPMedia", "pausePlayingAudio", [this.id]);
 };
 
 /**
@@ -121,35 +121,35 @@ YPMedia.prototype.getCurrentPosition = function(success, fail) {
     exec(function(p) {
         me._position = p;
         success(p);
-    }, fail, "Media", "getCurrentPositionAudio", [this.id]);
+    }, fail, "YPMedia", "getCurrentPositionAudio", [this.id]);
 };
 
 /**
  * Start recording audio file.
  */
 YPMedia.prototype.startRecord = function() {
-    exec(null, this.errorCallback, "Media", "startRecordingAudio", [this.id, this.src]);
+    exec(null, this.errorCallback, "YPMedia", "startRecordingAudio", [this.id, this.src]);
 };
 
 /**
  * Stop recording audio file.
  */
 YPMedia.prototype.stopRecord = function() {
-    exec(null, this.errorCallback, "Media", "stopRecordingAudio", [this.id]);
+    exec(null, this.errorCallback, "YPMedia", "stopRecordingAudio", [this.id]);
 };
 
 /**
  * Release the resources.
  */
 YPMedia.prototype.release = function() {
-    exec(null, this.errorCallback, "Media", "release", [this.id]);
+    exec(null, this.errorCallback, "YPMedia", "release", [this.id]);
 };
 
 /**
  * Adjust the volume.
  */
 YPMedia.prototype.setVolume = function(volume) {
-    exec(null, null, "Media", "setVolume", [this.id, volume]);
+    exec(null, null, "YPMedia", "setVolume", [this.id, volume]);
 };
 
 /**
@@ -157,7 +157,7 @@ YPMedia.prototype.setVolume = function(volume) {
  */
 YPMedia.prototype.setRate = function(rate) {
     if (cordova.platformId === 'ios'){
-        exec(null, null, "Media", "setRate", [this.id, rate]);
+        exec(null, null, "YPMedia", "setRate", [this.id, rate]);
     } else {
         console.warn('media.setRate method is currently not supported for', cordova.platformId, 'platform.')
     }
@@ -222,7 +222,7 @@ if (cordova.platformId === 'android' || cordova.platformId === 'amazon-fireos' |
     channel.waitForInitialization('onMediaPluginReady');
 
     channel.onCordovaReady.subscribe(function() {
-        exec(onMessageFromNative, undefined, 'Media', 'messageChannel', []);
+        exec(onMessageFromNative, undefined, 'YPMedia', 'messageChannel', []);
         channel.initializationComplete('onMediaPluginReady');
     });
 }

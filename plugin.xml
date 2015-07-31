@@ -43,7 +43,7 @@ id="cordova-plugin-media-m4a"
     <!-- android -->
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="Media" >
+            <feature name="YPMedia" >
                 <param name="android-package" value="yunpeng.cordova.media.AudioHandler"/>
             </feature>
         </config-file>
@@ -63,7 +63,7 @@ id="cordova-plugin-media-m4a"
      <!-- ios -->
      <platform name="ios">    
          <config-file target="config.xml" parent="/*">
-             <feature name="Media">
+             <feature name="YPMedia">
                  <param name="ios-package" value="YPCDVSound" /> 
              </feature>
          </config-file>
