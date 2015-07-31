@@ -30,7 +30,7 @@ id="cordova-plugin-media-m4a"
     <repo>https://github.com/iDay/cordova-plugin-media.git</repo>
     <issue>https://github.com/iDay/cordova-plugin-media/issues</issue>
     
-    <dependency id="cordova-plugin-file" version=">=2.0.0" />
+    <!-- <dependency id="cordova-plugin-file" version=">=2.0.0" /> -->
 
     <js-module src="www/YPMediaError.js" name="YPMediaError">
         <clobbers target="window.YPMediaError" />
