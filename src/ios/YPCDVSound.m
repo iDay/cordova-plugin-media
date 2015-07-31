@@ -18,7 +18,7 @@
  */
 
 #import "YPCDVSound.h"
-#import "YPCDVFile.h"
+#import "CDVFile.h"
 
 #define DOCUMENTS_SCHEME_PREFIX @"documents://"
 #define HTTP_SCHEME_PREFIX @"http://"
