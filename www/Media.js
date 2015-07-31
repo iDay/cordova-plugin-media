@@ -218,11 +218,11 @@ if (cordova.platformId === 'android' || cordova.platformId === 'amazon-fireos' |
 
     var channel = require('cordova/channel');
 
-    channel.createSticky('onMediaPluginReady');
-    channel.waitForInitialization('onMediaPluginReady');
+    channel.createSticky('onYPMediaPluginReady');
+    channel.waitForInitialization('onYPMediaPluginReady');
 
     channel.onCordovaReady.subscribe(function() {
         exec(onMessageFromNative, undefined, 'YPMedia', 'messageChannel', []);
-        channel.initializationComplete('onMediaPluginReady');
+        channel.initializationComplete('onYPMediaPluginReady');
     });
 }
