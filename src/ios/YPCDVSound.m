@@ -134,7 +134,7 @@
 - (YPCDVAudioFile*)audioFileForResource:(NSString*)resourcePath withId:(NSString*)mediaId doValidation:(BOOL)bValidate forRecording:(BOOL)bRecord
 {
     BOOL bError = NO;
-    CDVMediaError errcode = MEDIA_ERR_NONE_SUPPORTED;
+    YPCDVMediaError errcode = MEDIA_ERR_NONE_SUPPORTED;
     NSString* errMsg = @"";
     NSString* jsString = nil;
     YPCDVAudioFile* audioFile = nil;
@@ -201,7 +201,7 @@
 }
 
 // helper function to create a error object string
-- (NSString*)createMediaErrorWithCode:(CDVMediaError)code message:(NSString*)message
+- (NSString*)createMediaErrorWithCode:(YPCDVMediaError)code message:(NSString*)message
 {
     NSMutableDictionary* errorDict = [NSMutableDictionary dictionaryWithCapacity:2];
 
