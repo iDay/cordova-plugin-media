@@ -23,7 +23,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 id="cordova-plugin-media-m4a"
     version="1.0.2-dev">
 
-    <name>Media</name>
+    <name>YPMedia</name>
     <description>Cordova Media M4A Plugin</description>
     <license>Apache 2.0</license>
     <keywords>cordova,media</keywords>

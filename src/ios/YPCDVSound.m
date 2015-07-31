@@ -24,7 +24,7 @@
 #define HTTP_SCHEME_PREFIX @"http://"
 #define HTTPS_SCHEME_PREFIX @"https://"
 #define CDVFILE_PREFIX @"cdvfile://"
-#define RECORDING_WAV @"wav"
+#define RECORDING_M4A @"m4a"
 
 @implementation YPCDVSound
 
@@ -38,9 +38,9 @@
     NSString* docsPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
 
     // first check for correct extension
-    if ([[resourcePath pathExtension] caseInsensitiveCompare:RECORDING_WAV] != NSOrderedSame) {
+    if ([[resourcePath pathExtension] caseInsensitiveCompare:RECORDING_M4A] != NSOrderedSame) {
         resourceURL = nil;
-        NSLog(@"Resource for recording must have %@ extension", RECORDING_WAV);
+        NSLog(@"Resource for recording must have %@ extension", RECORDING_M4A);
     } else if ([resourcePath hasPrefix:DOCUMENTS_SCHEME_PREFIX]) {
         // try to find Documents:// resources
         filePath = [resourcePath stringByReplacingOccurrencesOfString:DOCUMENTS_SCHEME_PREFIX withString:[NSString stringWithFormat:@"%@/", docsPath]];
